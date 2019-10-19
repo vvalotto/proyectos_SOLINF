@@ -41,7 +41,15 @@ class ValidadorTextoNoNulo(BaseValidador):
     def validar(self, texto):
         if texto is None:
             self._valido = False
-            self._resultado = "Error: EsNulo"
+            self._resultado = "Error: Es Nulo"
+        return self
+
+
+class ValidadorTextoEsTipoTexto(BaseValidador):
+    def validar(self, texto):
+        if type(texto) is not str:
+            self._valido = False
+            self._resultado = "Error: No es texto"
         return self
 
 
@@ -52,6 +60,10 @@ class ValidadorTexto(BaseValidador):
         self._resultado = self._resultado + validacion.resultado
 
         validacion = ValidadorTextoNoNulo().validar(texto)
+        self._valido = self._valido and validacion.valido
+        self._resultado = self._resultado + validacion.resultado
+
+        validacion = ValidadorTextoEsTipoTexto().validar(texto)
         self._valido = self._valido and validacion.valido
         self._resultado = self._resultado + validacion.resultado
 
