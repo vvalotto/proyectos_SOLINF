@@ -18,3 +18,26 @@ class ProyectoDTO(Base):
     tipo_proyecto = Column(String(50), nullable=False)
     descripcion = Column(String(200), nullable=False)
     fecha_fin = Column(String(10), nullable=False)
+
+
+class ComponenteDTO(Base):
+    """
+    Tabla Componente
+    """
+    __tablename__ = "td_componente"
+
+    id = Column(String(36), primary_key=True)
+    nombre_componente = Column(String(200), nullable=False)
+    tipo_componente = Column(String(50), nullable=False)
+    id_proyecto = Column(String(36), ForeignKey(ProyectoDTO.id))
+
+
+class ElementoDTO(Base):
+
+    __tablename__ = "td_elemento"
+
+    id = Column(String(36), primary_key=True)
+    tipo_elemento = Column(String(20), nullable=False)
+    nombre_elemento = Column(String(100), nullable=False)
+    descripcion = Column(String(200), nullable=False)
+    id_componente = Column(String(36), ForeignKey(ComponenteDTO.id))
