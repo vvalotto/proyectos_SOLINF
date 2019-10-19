@@ -41,3 +41,33 @@ class ElementoDTO(Base):
     nombre_elemento = Column(String(100), nullable=False)
     descripcion = Column(String(200), nullable=False)
     id_componente = Column(String(36), ForeignKey(ComponenteDTO.id))
+
+
+class DimensionElementoDTO(Base):
+
+    __tablename__ = "td_dimension_elemento"
+
+    id = Column(String(36), primary_key=True)
+    tipo_dimension = Column(String(20), nullable=False)
+    valor_dimension = Column(Float, nullable=False)
+    id_elemento = Column(String(36), ForeignKey(ElementoDTO.id))
+
+
+class EsfuerzoElementoDTO(Base):
+
+    __tablename__ = "td_esfuerzo_elemento"
+
+    id = Column(String(36), primary_key=True)
+    tipo_actividad = Column(String(20), nullable=False)
+    esfuerzo_actividad = Column(Integer, nullable=False)
+    id_elemento = Column(String(36), ForeignKey(ElementoDTO.id))
+
+
+class DefectoElementoDTO(Base):
+
+    __tablename__ = "td_defecto_elemento"
+
+    id = Column(String(36), primary_key=True)
+    fase_defecto = Column(String(20), nullable=False)
+    cantidad_defecto = Column(Integer, nullable=False)
+    id_elemento = Column(String(36), ForeignKey(ElementoDTO.id))
