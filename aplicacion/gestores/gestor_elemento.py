@@ -20,10 +20,7 @@ class GestorElemento:
         self._nuevo = False
         return
 
-    def crear_elemento(self, nombre_elemento,
-                             tipo_elemento,
-                             descripcion,
-                             id_componente):
+    def crear_elemento(self, nombre_elemento, tipo_elemento, descripcion, id_componente):
         """
         Metodo Factoria que crea solo una nueva entidad elemento
         :return: la proyecto creado
@@ -65,6 +62,7 @@ class GestorElemento:
         self._nuevo = False
 
         self._guardar_dimension()
+        self._guardar_esfuerzo()
 
         self._cerrar_unidad_de_trabajo()
         return
@@ -85,11 +83,30 @@ class GestorElemento:
                 print("elimina")
         return
 
+    def _guardar_esfuerzo(self):
+
+        esfuerzos = self._elemento.lista_esfuerzos
+        for item in esfuerzos:
+            if item[1] == "NUEVO":
+                # llama al repositorio de dimensiones y guarda
+                print("agrega: " + str(item[0]))
+                self._repositorio.agregar_esfuerzo_elemento(item[0])
+            elif item[1] == "CAMBIO":
+                # llama al repositorio de dimensiones y actualiza
+                print("actualiza")
+            elif item[1] == "BORRADO":
+                self._repositorio.eliminar_esfuerzo_elemento(item[0])
+                self._elemento.lista_esfuerzos.remove(item)
+                print("elimina")
+        return
+
     def recuperar_elemento_por_nombre(self, nombre):
         self._abrir_unidad_de_trabajo()
         self._elemento = self._repositorio.recuperar_por_nombre(nombre)
         for dim in self._repositorio.recuperar_dimensiones(self._elemento.identificacion):
             self._elemento.recuperar_dimension(dim)
+        for esf in self._repositorio.recuperar_esfuerzos(self._elemento.identificacion):
+            self._elemento.recuperar_esfuerzo(esf)
         self._cerrar_unidad_de_trabajo()
         return self._elemento
 
@@ -100,8 +117,6 @@ class GestorElemento:
             self._elemento.recuperar_dimension(dim)
         for esf in self._repositorio.recuperar_esfuerzos(self._elemento.identificacion):
             self._elemento.recuperar_esfuerzo(esf)
-        for dfc in self._repositorio.recuperar_defectos(self._elemento.identificacion):
-            self._elemento.recuperar_defecto(dfc)
         self._cerrar_unidad_de_trabajo()
         return self._elemento
 
@@ -148,6 +163,24 @@ class GestorElemento:
                 encontro = self._elemento.lista_dimensiones.index(dim) + 1
                 return encontro
         return encontro
+
+    def registrar_esfuerzo(self, actividad, esfuerzo):
+        esf = Esfuerzo(actividad, esfuerzo, self._elemento.identificacion)
+        self._elemento.agregar_esfuerzo(esf)
+        return
+
+    def eliminar_registro_de_esfuerzo(self, esfuerzo):
+        self._elemento.eliminar_esfuerzo(esfuerzo)
+        return
+
+    def cambiar_registro_de_esfuerzo(self, esfuerzo):
+        self._elemento.modificar_esfuerzo(esfuerzo)
+        return
+
+    def recuperar_registro_de_esfuerzos(self):
+        for item in self._repositorio.recuperar_esfuerzos(self._elemento.identificacion):
+            print(item)
+        return
 
     def _abrir_unidad_de_trabajo(self):
         sesion = sessionmaker(bind=self._repositorio.contexto.recurso)

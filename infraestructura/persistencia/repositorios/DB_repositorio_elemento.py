@@ -4,7 +4,10 @@ Se implementa el repositorio de la Elementos en Base de Datos
 from dominio.repositorios.base_repositorio_elemento import *
 from infraestructura.persistencia.modelo.base_de_datos_proyectos import *
 from infraestructura.persistencia.mapeador.dimension_elemento import *
+from infraestructura.persistencia.mapeador.esfuerzo_elemento import *
+
 from .DB_repositorio_dimension import *
+from .DB_repositorio_esfuerzo import *
 
 
 class DBRepositorioElemento(BaseRepositorioElemento):
@@ -13,6 +16,7 @@ class DBRepositorioElemento(BaseRepositorioElemento):
         super().__init__(contexto)
         self._mapeador = mapeador
         self._repo_dimension = DBRepositorioDimension(contexto, MapeadorDatosDimension(contexto))
+        self._repo_esfuerzo = DBRepositorioEsfuerzo(contexto, MapeadorDatosEsfuerzo(contexto))
         return
 
     def agregar(self, elemento):
@@ -152,6 +156,28 @@ class DBRepositorioElemento(BaseRepositorioElemento):
 
     def recuperar_dimensiones(self, elemento):
         return self._repo_dimension.recuperar_por_elemento(elemento)
+
+    def agregar_esfuerzo_elemento(self, esfuerzo_elemento):
+        """
+        Persiste un nueva dimension para elemento.
+        :param esfuerzo_elemento:
+        """
+        self._repo_esfuerzo.agregar(esfuerzo_elemento)
+        return
+
+    def eliminar_esfuerzo_elemento(self, esfuerzo_elemento):
+        self._repo_esfuerzo.eliminar(esfuerzo_elemento)
+        return
+
+    def recuperar_esfuerzo_elemento(self, esfuerzo_elemento):
+        return self._repo_esfuerzo.recuperar(esfuerzo_elemento)
+
+    def validar_existencia_efuerzo_elemento(self, efuerzo_elemento):
+        encontro = False
+        return encontro
+
+    def recuperar_esfuerzos(self, elemento):
+        return self._repo_esfuerzo.recuperar_por_elemento(elemento)
 
     @staticmethod
     def _copiar_registro(desde, hacia):
