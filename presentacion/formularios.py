@@ -26,3 +26,21 @@ class ProyectoForm(FlaskForm):
         ProyectoForm.tipo_proyecto = None
         ProyectoForm.fecha_fin = None
         ProyectoForm.lista_modulos = []
+
+
+class ComponenteForm(FlaskForm):
+    nombre_componente = StringField('Nombre', validators=[DataRequired(), Length(max=50)])
+    tipo_componente = StringField('Tipo de Componente')
+    id = StringField('Identificador')
+    id_proyecto = StringField('Id_Proyecto')
+    proyecto = StringField('Proyecto')
+    lista_elementos = []
+
+    @staticmethod
+    def inicializar():
+        ComponenteForm.nombre_componente = None
+        ComponenteForm.tipo_componente = None
+        ComponenteForm.id = None
+        ComponenteForm.id_proyecto = None
+        ComponenteForm.proyecto = None
+        ComponenteForm.lista_elementos = []

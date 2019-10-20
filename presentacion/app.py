@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request,redirect, url_for
 from flask_bootstrap import Bootstrap
-from presentacion.formularios import ListaProyectoForm, ProyectoForm
-from presentacion.modelos import ListaProyectoVM, ProyectoVM
+from presentacion.formularios import ListaProyectoForm, ProyectoForm, ComponenteForm
+from presentacion.modelos import ListaProyectoVM, ProyectoVM, ComponenteVM
 from presentacion.configurador import *
 
 app = Flask(__name__)
@@ -72,7 +72,29 @@ def proyecto(id):
 @app.route("/componente/", methods=["POST"])
 @app.route("/componente/<string:id>/", methods=["GET", "POST"])
 def componente(id):
-    return
+    formulario = ComponenteForm()
+    formulario.inicializar()
+    componente = ComponenteVM(config.gestor_componente)
+
+    if id != 0:
+        resultado = componente.recuperar_componente(id)
+        if resultado is None:
+            return redirect(url_for("index"))
+        else:
+            componente.listar_elementos()
+            formulario.nombre_componente = componente.nombre
+            formulario.tipo_componente = componente.tipo
+            formulario.id = componente.identificador
+            formulario.proyecto = componente.proyecto
+            for item in componente.lista_elementos:
+                formulario.lista_elementos.append(item)
+    return render_template("componente.html", form=formulario)
+
+
+@app.route("/elemento/", methods=["POST"])
+@app.route("/elemento/<string:id>/", methods=["GET", "POST"])
+def elemento(id):
+    return "En Contruccion"
 
 
 if __name__ == '__main__':

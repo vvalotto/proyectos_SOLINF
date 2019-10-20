@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %} ProyecSOLIF - Proyecto {% endblock %}
+
+{% block content %}
+
+    <div class="container-fluid">
+        {{ nombre }}
+    </div>
+
+    <div class="container-fluid">
+        <h2>Componente del Proyecto: {{form.proyecto}}</h2>
+
+        <form method="POST" action="/componente/0" role="form">
+
+            {{ form.hidden_tag() }}
+
+            <div class="row">
+                <div class="col-sm-4">
+                      <div class="form-group">
+                            <label for="nombre_componente">Nombre del Componente</label>
+                             {% if form.id !="0" %}
+                             <input type="text" class="form-control"
+                                            placeholder="{{ form.nombre_componente }}"
+                                            readonly>
+                             {% else %}
+                             <input type="text" class="form-control" id="nombre_componente"
+                                    name="nombre_componente">
+                             {% endif %}
+                      </div>
+                    </div>
+                <div class="col-sm-4">
+                      <div class="form-group">
+                            <label for="tipo_componente">Tipo</label>
+                             {% if form.id !="0" %}
+                             <input type="text" class="form-control"
+                                            placeholder="{{ form.tipo_componente}}"
+                                            readonly>
+                             {% else %}
+                             <input type="text" class="form-control" id="tipo_componente"
+                                    name="tipo_componente">
+                             {% endif %}
+                      </div>
+                    </div>
+            </div>
+
+            <div class="row">
+                {%if form.id =="0" %}
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="text-right">
+                            <button class="btn btn-primary" type="submit"> Agregar Componente</button>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+        </form>
+
+        {%if form.id !="0" %}
+        <div class="panel panel-defaulf">
+            <div class="row">
+                <div class = "col-sm-8" style = "background-color:lavender">
+                    <div class="panel-heading" style="">
+                        <h1><p class="text-center"> Elementos del Módulo </h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class = "col-sm-8" style = "background-color:antiquewhite">
+                    <div class="panel-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nombre </th>
+                                    <th>Tipo</th>
+                                    <th> Ir a</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in form.lista_elementos %}
+                                <tr>
+                                    <td>{{ item.nombre_elemento }}</td>
+                                    <td>{{ item.tipo_elemento}}</td>
+                                    <td><a href="{{ url_for('elemento', id=item.identificacion) }}"> Ver elemento </a></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif%}
+
+        </div>
+    </div>
+
+
+{% endblock %}

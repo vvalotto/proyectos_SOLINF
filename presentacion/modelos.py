@@ -91,3 +91,75 @@ class ProyectoVM:
         for componente in lista_componentes:
             self._modulos.append(componente)
         return
+
+
+class ListaComponenteVM:
+
+    def __init__(self, gestor):
+        self._gestor = gestor
+        self._componentes= []
+        return
+
+    def obtener_componentes(self):
+        return self._gestor.obtener_todos_los_componentes()
+
+
+class ComponenteVM:
+
+    @property
+    def nombre(self):
+        return self._nombre_componente
+
+    @property
+    def tipo(self):
+        return self._tipo_componente
+
+    @property
+    def identificador(self):
+        return self._id
+
+    @property
+    def lista_elementos(self):
+        return self._elementos
+
+    @property
+    def proyecto(self):
+        return self._proyecto
+
+    def __init__(self, gestor):
+        self._gestor = gestor
+        self._nombre_componente= None
+        self._tipo_componente = None
+        self._id = None
+        self._id_proyecto = None
+        self._proyecto = None
+        self._elementos = []
+        return
+
+    def existe_componente(self, nombre):
+        if self._gestor.recuperar_componente(nombre):
+            return True
+        else:
+            return False
+
+    def recuperar_componente(self, id):
+        try:
+            componente = self._gestor.recuperar_componente(id)
+            self._id = componente.identificacion
+            self._nombre_componente = componente.nombre
+            self._tipo_componente = componente.tipo_componente
+            self._id_proyecto = componente.identificacion_proyecto
+            self._proyecto = Configurador.gestor_proyecto.recuperar_proyecto(self._id_proyecto).nombre
+        except Exception:
+            return None
+        return componente
+
+    def listar_elementos(self):
+        self._elementos = []
+        repo_elemento = DBRepositorioElemento(Configurador.contexto, MapeadorDatosElemento(Configurador.contexto))
+        gestor_elemento= GestorElemento()
+        gestor_elemento.asignar_repositorio(repo_elemento)
+        lista_componentes = gestor_elemento.obtener_elementos_del_componente(self._id)
+        for componente in lista_componentes:
+            self._elementos.append(componente)
+        return
