@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %} ProyecSOLIF - Proyecto {% endblock %}
+
+{% block content %}
+
+    <div class="container-fluid">
+        <h1>Datos del Proyecto:</h1>
+
+        <div class="container">
+            <form method="POST" action="/proyecto/0" role="form">
+                {{ form.hidden_tag() }}
+
+                <div class="row">
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                            <label for="nombre_proyecto">Nombre de Proyecto</label>
+                             {% if form.id !="0" %}
+                             <input type="text" class="form-control"
+                                            placeholder="{{ form.nombre_proyecto}}"
+                                            readonly>
+                             {% else %}
+                             <input type="text" class="form-control" id="nombre_proyecto"
+                                    name="nombre_proyecto">
+                             {% endif %}
+                      </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                          <label for="tipo_proyecto"> Tipo </label>
+                             {%if form.id !="0" %}
+                                <input type="text" class="form-control"
+                                            placeholder="{{ form.tipo_proyecto}}"
+                                            readonly>
+                             {% else %}
+                             <input type="text" class="form-control" id="tipo_proyecto"
+                                    name="tipo_proyecto">
+                              {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="descripcion"> Descripción </label>
+                                 {%if form.id !="0" %}
+                                    <input type="text" class="form-control"
+                                                placeholder="{{ form.descripcion}}"
+                                                readonly>
+                                 {% else %}
+                                    <input type="text" class="form-control" id="descripcion"
+                                        name="descripcion">
+                                  {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                              <label for="fecha_fin"> Fecha Fin </label>
+                                 {%if form.id !="0" %}
+                                    <input type="text" class="form-control"
+                                                placeholder="{{ form.fecha_fin}}"
+                                                readonly>
+                                 {% else %}
+                                 <input type="text" class="form-control" id="fecha_fin"
+                                        name="fecha_fin">
+                                  {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    {%if form.id =="0" %}
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <div class="text-right">
+                                    <button class="btn btn-primary" type="submit"> Agregar </button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+
+            </form>
+
+
+            {%if form.id !="0" %}
+                <div class="panel panel-defaulf">
+                    <div class="row">
+                        <div class = "col-sm-8" style = "background-color:lavender">
+                            <div class="panel-heading" style="">
+                                <h1><p class="text-center"> Módulos Componentes </h1>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class = "col-sm-8" style = "background-color:antiquewhite">
+                            <div class="panel-body">
+                                <table class="table table-striped">
+                                <thead>
+                                  <tr>
+                                        <th>Nombre </th>
+                                        <th>Tipo</th>
+                                        <th>Ir a</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                   {% for item in form.lista_modulos %}
+                                      <tr>
+                                            <td>{{ item.nombre }}</td>
+                                            <td>{{ item.tipo_componente}}</td>
+                                            <td><a href="{{ url_for('componente', id=item.identificacion) }}"> Ver componente </a></td>
+                                      </tr>
+                                   {% endfor %}
+                                </tbody>
+                              </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+
+{% endblock %}

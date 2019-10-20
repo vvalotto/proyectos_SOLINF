@@ -1,7 +1,7 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request,redirect, url_for
 from flask_bootstrap import Bootstrap
-from presentacion.formularios import ListaProyectoForm
-from presentacion.modelos import ListaProyectoVM
+from presentacion.formularios import ListaProyectoForm, ProyectoForm
+from presentacion.modelos import ListaProyectoVM, ProyectoVM
 from presentacion.configurador import *
 
 app = Flask(__name__)
@@ -37,6 +37,41 @@ def proyecto_lista():
 app.route("/proyecto/", methods=["POST"])
 @app.route("/proyecto/<string:id>", methods=["GET", "POST"])
 def proyecto(id):
+    formulario = ProyectoForm()
+    formulario.inicializar()
+    proyecto = ProyectoVM(config.gestor_proyecto)
+
+    if id != "0":
+        if request.method == "GET":
+            if proyecto.recuperar_proyecto(id) is None:
+                return redirect(url_for("index"))
+            else:
+                proyecto.listar_modulos()
+                formulario.id = proyecto.identificador
+                formulario.nombre_proyecto = proyecto.nombre
+                formulario.descripcion = proyecto.descripcion
+                formulario.tipo_proyecto = proyecto.tipo
+                formulario.fecha_fin = proyecto.fecha_fin
+
+                for item in proyecto.lista:
+                    formulario.lista_modulos.append(item)
+    else:
+        if request.method == "POST":
+            nombre_proyecto = request.form.get("nombre_proyecto")
+            tipo_proyecto = request.form.get("tipo_proyecto")
+            descripcion = request.form.get("descripcion")
+            fecha_fin = request.form.get("fecha_fin")
+            proyecto.agregar_proyecto(nombre_proyecto, tipo_proyecto, descripcion, fecha_fin)
+            return redirect("/proyectos/")
+        else:
+            formulario.id = id
+
+    return render_template("proyecto.html", form=formulario)
+
+
+@app.route("/componente/", methods=["POST"])
+@app.route("/componente/<string:id>/", methods=["GET", "POST"])
+def componente(id):
     return
 
 
