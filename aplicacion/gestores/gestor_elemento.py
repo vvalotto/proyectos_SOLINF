@@ -63,6 +63,7 @@ class GestorElemento:
 
         self._guardar_dimension()
         self._guardar_esfuerzo()
+        self._guardar_defecto()
 
         self._cerrar_unidad_de_trabajo()
         return
@@ -100,6 +101,23 @@ class GestorElemento:
                 print("elimina")
         return
 
+    def _guardar_defecto(self):
+
+        defectos = self._elemento.lista_defectos
+        for item in defectos:
+            if item[1] == "NUEVO":
+                # llama al repositorio de dimensiones y guarda
+                print("agrega: " + str(item[0]))
+                self._repositorio.agregar_defecto_elemento(item[0])
+            elif item[1] == "CAMBIO":
+                # llama al repositorio de dimensiones y actualiza
+                print("actualiza")
+            elif item[1] == "BORRADO":
+                self._repositorio.eliminar_defecto_elemento(item[0])
+                self._elemento.lista_esfuerzos.remove(item)
+                print("elimina")
+        return
+
     def recuperar_elemento_por_nombre(self, nombre):
         self._abrir_unidad_de_trabajo()
         self._elemento = self._repositorio.recuperar_por_nombre(nombre)
@@ -107,6 +125,8 @@ class GestorElemento:
             self._elemento.recuperar_dimension(dim)
         for esf in self._repositorio.recuperar_esfuerzos(self._elemento.identificacion):
             self._elemento.recuperar_esfuerzo(esf)
+        for dfc in self._repositorio.recuperar_defectos(self._elemento.identificacion):
+            self._elemento.recuperar_defecto(dfc)
         self._cerrar_unidad_de_trabajo()
         return self._elemento
 
@@ -117,6 +137,8 @@ class GestorElemento:
             self._elemento.recuperar_dimension(dim)
         for esf in self._repositorio.recuperar_esfuerzos(self._elemento.identificacion):
             self._elemento.recuperar_esfuerzo(esf)
+        for dfc in self._repositorio.recuperar_defectos(self._elemento.identificacion):
+            self._elemento.recuperar_defecto(dfc)
         self._cerrar_unidad_de_trabajo()
         return self._elemento
 
@@ -179,6 +201,32 @@ class GestorElemento:
 
     def recuperar_registro_de_esfuerzos(self):
         for item in self._repositorio.recuperar_esfuerzos(self._elemento.identificacion):
+            print(item)
+        return
+
+    def registrar_defecto(self, fase, cantidad):
+        defec = Defecto(fase, cantidad, self._elemento.identificacion)
+        self._elemento.agregar_defecto(defec)
+        return
+
+    def elminar_registro_de_defecto(self, defecto):
+        self._elemento.eliminar_defecto(defecto)
+        return
+
+    def cambiar_registro_de_defecto(self, defecto):
+        self._elemento.modificar_defecto(defecto)
+        return
+
+    def existe_defecto(self, defecto):
+        encontro = 0
+        for dfc in self._elemento.lista_defectos:
+            if defecto == dfc[0]:
+                encontro = self._elemento.lista_defectos.index(dfc) + 1
+                return encontro
+        return encontro
+
+    def recuperar_registro_de_defectos(self):
+        for item in self._repositorio.recuperar_defectos(self._elemento.identificacion):
             print(item)
         return
 

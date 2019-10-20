@@ -5,9 +5,11 @@ from dominio.repositorios.base_repositorio_elemento import *
 from infraestructura.persistencia.modelo.base_de_datos_proyectos import *
 from infraestructura.persistencia.mapeador.dimension_elemento import *
 from infraestructura.persistencia.mapeador.esfuerzo_elemento import *
+from infraestructura.persistencia.mapeador.defecto_elemento import *
 
 from .DB_repositorio_dimension import *
 from .DB_repositorio_esfuerzo import *
+from .DB_repositorio_defecto import *
 
 
 class DBRepositorioElemento(BaseRepositorioElemento):
@@ -17,6 +19,7 @@ class DBRepositorioElemento(BaseRepositorioElemento):
         self._mapeador = mapeador
         self._repo_dimension = DBRepositorioDimension(contexto, MapeadorDatosDimension(contexto))
         self._repo_esfuerzo = DBRepositorioEsfuerzo(contexto, MapeadorDatosEsfuerzo(contexto))
+        self._repo_defecto = DBRepositorioDefecto(contexto, MapeadorDatosDefecto(contexto))
         return
 
     def agregar(self, elemento):
@@ -178,6 +181,28 @@ class DBRepositorioElemento(BaseRepositorioElemento):
 
     def recuperar_esfuerzos(self, elemento):
         return self._repo_esfuerzo.recuperar_por_elemento(elemento)
+
+    def agregar_defecto_elemento(self, defecto_elemento):
+        """
+        Persiste un nueva dimension para elemento.
+        :param defecto_elemento:
+        """
+        self._repo_defecto.agregar(defecto_elemento)
+        return
+
+    def eliminar_defecto_elemento(self, defecto_elemento):
+        self._repo_dimension.eliminar(defecto_elemento)
+        return
+
+    def recuperar_defecto_elemento(self, defecto_elemento):
+        return self._repo_dimension.recuperar(defecto_elemento)
+
+    def validar_existencia_defecto_elemento(self, defecto_elemento):
+        encontro = False
+        return encontro
+
+    def recuperar_defectos(self, elemento):
+        return self._repo_defecto.recuperar_por_elemento(elemento)
 
     @staticmethod
     def _copiar_registro(desde, hacia):
