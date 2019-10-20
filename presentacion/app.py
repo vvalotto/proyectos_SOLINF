@@ -1,6 +1,8 @@
 from flask import Flask, render_template
+from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
+boostrap = Bootstrap(app)
 
 
 @app.errorhandler(404)
@@ -15,20 +17,10 @@ def internal_error(error):
 
 @app.route("/")
 def index():
-    user = {'nombre': 'Python'}
-    return render_template("index.html", usuario=user)
+    return render_template("index.html")
 
 
-@app.route("/suma")
-def suma():
-    return str(2 + 2)
 
-
-@app.route("/mayuscula/<string:palabra>")
-def mayuscula(palabra):
-    if len(palabra) < 2:
-        return render_template("500.html")
-    return str(palabra).upper()
 
 
 if __name__ == '__main__':
