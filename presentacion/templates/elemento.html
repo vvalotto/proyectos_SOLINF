@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %} ProyecSOLIF - Proyecto {% endblock %}
+
+{% block content %}
+
+    <div class="container-fluid">
+        {{ nombre }}
+    </div>
+
+    <div class="container-fluid">
+
+        <h2 class="text-center">Proyecto: {{form.proyecto}}</h2>
+        <h2 class="text-center">Componente: {{form.componente}}</h2>
+
+        <form method="POST" action="/elemento/0" role="form">
+
+            {{ form.hidden_tag() }}
+
+            <div class="row">
+                <div class="col-sm-6">
+                      <div class="form-group">
+                            <label for="nombre_elemento">Nombre del Elemento</label>
+                             {% if form.id !="0" %}
+                             <input type="text" class="form-control"
+                                            placeholder="{{ form.nombre_elemento }}"
+                                            readonly>
+                             {% else %}
+                             <input type="text" class="form-control" id="nombre_elemento"
+                                    name="nombre_elemento">
+                             {% endif %}
+                      </div>
+                </div>
+
+                <div class="col-sm-4">
+                      <div class="form-group">
+                            <label for="tipo_elemento">Tipo</label>
+                             {% if form.id !="0" %}
+                             <input type="text" class="form-control"
+                                            placeholder="{{ form.tipo_elemento}}"
+                                            readonly>
+                             {% else %}
+                             <input type="text" class="form-control" id="tipo_elemento"
+                                    name="tipo_elemento">
+                             {% endif %}
+                      </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-10">
+                      <div class="form-group">
+                            <label for="descripcion">Descripción</label>
+                             {% if form.id !="0" %}
+                             <input type="text" class="form-control"
+                                            placeholder="{{ form.descripcion }}"
+                                            readonly>
+                             {% else %}
+                             <input type="text" class="form-control" id="descripcion"
+                                    name="descripcion">
+                             {% endif %}
+                      </div>
+                </div>
+            </div>
+            <div class="row">
+                {%if form.id =="0" %}
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="text-right">
+                            <button class="btn btn-primary" type="submit"> Agregar Elemento</button>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+        </form>
+
+        {%if form.id !="0" %}
+        <div class="panel panel-defaulf">
+            <div class="row">
+                <div class = "col-sm-4" style = "background-color:wheat">
+                    <div class="panel-heading" style="">
+                        <h1><p class="text-center"> Dimensiones </h1>
+                    </div>
+                </div>
+                <div class = "col-sm-3" style = "background-color:lightblue">
+                    <div class="panel-heading" style="">
+                        <h1><p class="text-center"> Esfuerzos </h1>
+                    </div>
+                </div>
+                <div class = "col-sm-3" style = "background-color:lavender">
+                    <div class="panel-heading" style="">
+                        <h1><p class="text-center"> Defectos </h1>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class = "col-sm-4" style = "background-color:wheat">
+                    <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Dimension </th>
+                                    <th>Tipo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in form.dimensiones %}
+                                <tr>
+                                    <td>{{ item.tipo_dimension }}</td>
+                                    <td>{{ item.valor_dimension}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                </div>
+
+                <div class = "col-sm-3" style = "background-color:lightblue">
+                    <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Actividad </th>
+                                    <th>Esfuerzo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in form.esfuerzos %}
+                                <tr>
+                                    <td>{{ item.tipo_actividad }}</td>
+                                    <td>{{ item.esfuerzo_actividad}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                </div>
+
+                <div class = "col-sm-3" style = "background-color:lavender">
+                    <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Fase de Testing </th>
+                                    <th>Cantidad</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in form.defectos %}
+                                <tr>
+                                    <td>{{ item.fase_defecto }}</td>
+                                    <td>{{ item.cantidad_defecto}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                </div>
+
+            </div>
+        </div>
+        {% endif%}
+
+    </div>
+
+{% endblock %}

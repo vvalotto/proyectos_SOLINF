@@ -163,3 +163,92 @@ class ComponenteVM:
         for componente in lista_componentes:
             self._elementos.append(componente)
         return
+
+
+class ListaElementosVM:
+
+    def __init__(self, gestor):
+        self._gestor = gestor
+        self._elementos = []
+        return
+
+    def obtener_elementos(self):
+        return self._gestor.obtener_todos_los_elementos()
+
+
+class ElementoVM:
+
+    @property
+    def nombre_elemento(self):
+        return self._nombre_elemento
+
+    @property
+    def tipo_elemento(self):
+        return self._tipo_elemento
+
+    @property
+    def descripcion(self):
+        return self._descripcion
+
+    @property
+    def identificador(self):
+        return self._id
+
+    @property
+    def dimensiones(self):
+        return self._dimensiones
+
+    @property
+    def esfuerzos(self):
+        return self._esfuerzos
+
+    @property
+    def defectos(self):
+        return self._defectos
+
+    @property
+    def proyecto(self):
+        return self._proyecto
+
+    @property
+    def componente(self):
+        return self._componente
+
+    def __init__(self, gestor):
+        self._gestor = gestor
+        self._nombre_elemento = None
+        self._tipo_elemento = None
+        self._descripcion = None
+        self._id = None
+        self._id_componente = None
+        self._dimensiones = []
+        self._esfuerzos = []
+        self._defectos = []
+        self._proyecto = None
+        self._componente = None
+        return
+
+    def existe_elemento(self, id):
+        if self._gestor.existe_componente(id):
+            return True
+        else:
+            return False
+
+    def recuperar_elemento(self, id):
+        elemento = self._gestor.recuperar_elemento(id)
+        self._id = elemento.identificacion
+        self._nombre_elemento = elemento.nombre_elemento
+        self._tipo_elemento = elemento.tipo_elemento
+        self._id_componente = elemento.id_componente
+        self._descripcion = elemento.descripcion
+
+        componente = Configurador.gestor_componente.recuperar_componente(elemento._id_componente)
+        self._componente = componente.nombre
+
+        proyecto = Configurador.gestor_proyecto.recuperar_proyecto(componente._id_proyecto)
+        self._proyecto = proyecto.nombre
+
+        self._dimensiones = elemento.lista_dimensiones
+        self._esfuerzos = elemento.lista_esfuerzos
+        self._defectos = elemento.lista_defectos
+        return elemento

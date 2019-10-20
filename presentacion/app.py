@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request,redirect, url_for
 from flask_bootstrap import Bootstrap
-from presentacion.formularios import ListaProyectoForm, ProyectoForm, ComponenteForm
-from presentacion.modelos import ListaProyectoVM, ProyectoVM, ComponenteVM
+from presentacion.formularios import ListaProyectoForm, ProyectoForm, ComponenteForm, ElementoForm
+from presentacion.modelos import ListaProyectoVM, ProyectoVM, ComponenteVM, ElementoVM
 from presentacion.configurador import *
 
 app = Flask(__name__)
@@ -34,7 +34,7 @@ def proyecto_lista():
     return render_template("proyectos.html", form=formulario)
 
 
-app.route("/proyecto/", methods=["POST"])
+@app.route("/proyecto/", methods=["POST"])
 @app.route("/proyecto/<string:id>", methods=["GET", "POST"])
 def proyecto(id):
     formulario = ProyectoForm()
@@ -94,7 +94,34 @@ def componente(id):
 @app.route("/elemento/", methods=["POST"])
 @app.route("/elemento/<string:id>/", methods=["GET", "POST"])
 def elemento(id):
-    return "En Contruccion"
+    formulario = ElementoForm()
+    formulario.inicializar()
+    elemento = ElementoVM(config.gestor_elemento)
+
+    resultado = elemento.recuperar_elemento(id)
+    if id != 0:
+        if resultado is None:
+            return redirect(url_for("index"))
+        else:
+            elemento.recuperar_elemento(id)
+            formulario.nombre_elemento = elemento.nombre_elemento
+            formulario.tipo_elemento = elemento.tipo_elemento
+            formulario.id = elemento.identificador
+            formulario.descripcion = elemento.descripcion
+
+            for item in elemento.dimensiones:
+                formulario.dimensiones.append(item[0])
+
+            for item in elemento.esfuerzos:
+                formulario.esfuerzos.append(item[0])
+
+            for item in elemento.defectos:
+                formulario.defectos.append(item[0])
+
+            formulario.componente = elemento.componente
+            formulario.proyecto = elemento.proyecto
+
+    return render_template("elemento.html", form=formulario)
 
 
 if __name__ == '__main__':
