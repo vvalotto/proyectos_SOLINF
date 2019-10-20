@@ -18,9 +18,7 @@ class GestorComponente:
         self._nuevo = False
         return
 
-    def crear_componente(self, nombre_componente,
-                             tipo_componente,
-                             id_proyecto):
+    def crear_componente(self, nombre_componente, tipo_componente, id_proyecto):
         """
         Metodo Factoria que crea una nueva entidad
         :return: la proyecto creado
@@ -62,11 +60,7 @@ class GestorComponente:
 
     def recuperar_componente(self, id_componente):
         self._abrir_unidad_de_trabajo()
-        """
-        dto = self._repositorio.recuperar(id_proyecto)
-        self._proyecto = self._mapear_DTO_a_proyecto(dto)
-        """
-        self._componente= self._repositorio.recuperar(id_componente)
+        self._componente = self._repositorio.recuperar(id_componente)
         self._cerrar_unidad_de_trabajo()
         return self._componente
 

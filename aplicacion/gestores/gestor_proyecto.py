@@ -18,10 +18,7 @@ class GestorProyecto:
         self._nuevo = False
         return
 
-    def crear_proyecto(self, nombre_proyecto,
-                             tipo_proyecto,
-                             descripcion,
-                             fecha_fin):
+    def crear_proyecto(self, nombre_proyecto, tipo_proyecto, descripcion, fecha_fin):
         """
         Metodo Factoria que crea una nueva entidad
         :param nombre_proyecto:  (OV)
@@ -70,10 +67,6 @@ class GestorProyecto:
 
     def recuperar_proyecto(self, id_proyecto):
         self._abrir_unidad_de_trabajo()
-        """
-        dto = self._repositorio.recuperar(id_proyecto)
-        self._proyecto = self._mapear_DTO_a_proyecto(dto)
-        """
         self._proyecto = self._repositorio.recuperar(id_proyecto)
         self._cerrar_unidad_de_trabajo()
         return self._proyecto
@@ -81,10 +74,6 @@ class GestorProyecto:
     def obtener_todos_los_proyectos(self):
         self._abrir_unidad_de_trabajo()
         lista_proyectos = self._repositorio.obtener_todo()
-        """
-        for ua in list(self._repositorio.obtener_todo()):
-            lista_unidad_academica.append(self._mapear_DTO_a_unidad_academica(ua))
-        """
         self._cerrar_unidad_de_trabajo()
         return lista_proyectos
 
