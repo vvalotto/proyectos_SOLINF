@@ -64,7 +64,25 @@ class GestorElemento:
                 print('Error al guardar')
         self._nuevo = False
 
+        self._guardar_dimension()
+
         self._cerrar_unidad_de_trabajo()
+        return
+
+    def _guardar_dimension(self):
+
+        dimensiones = self._elemento.lista_dimensiones
+        for item in dimensiones:
+            if item[1] == "NUEVO":
+                # llama al repositorio de dimensiones y guarda
+                print("agrega: " + str(item[0]))
+                self._repositorio.agregar_dimension_elemento(item[0])
+            elif item[1] == "CAMBIO":
+                print("actualiza")
+            elif item[1] == "BORRADO":
+                self._repositorio.eliminar_dimension_elemento(item[0])
+                self._elemento.lista_dimensiones.remove(item)
+                print("elimina")
         return
 
     def recuperar_elemento_por_nombre(self, nombre):
@@ -72,10 +90,6 @@ class GestorElemento:
         self._elemento = self._repositorio.recuperar_por_nombre(nombre)
         for dim in self._repositorio.recuperar_dimensiones(self._elemento.identificacion):
             self._elemento.recuperar_dimension(dim)
-        for esf in self._repositorio.recuperar_esfuerzos(self._elemento.identificacion):
-            self._elemento.recuperar_esfuerzo(esf)
-        for dfc in self._repositorio.recuperar_defectos(self._elemento.identificacion):
-            self._elemento.recuperar_defecto(dfc)
         self._cerrar_unidad_de_trabajo()
         return self._elemento
 
@@ -108,6 +122,32 @@ class GestorElemento:
         valida = self._repositorio.validar_existencia(nombre)
         self._cerrar_unidad_de_trabajo()
         return valida
+
+    def dimensionar_elemento(self, dimension, valor):
+        dim = Dimension(dimension, valor, self._elemento.identificacion)
+        self._elemento.agregar_dimension(dim)
+        return
+
+    def sacar_dimension(self, dimension):
+        self._elemento.eliminar_dimension(dimension)
+        return
+
+    def cambiar_dimension(self, dimension):
+        self._elemento.modificar_dimension(dimension)
+        return
+
+    def recuperar_dimensiones(self):
+        for item in self._repositorio.recuperar_dimensiones(self._elemento.identificacion):
+            print(item)
+        return
+
+    def existe_dimension(self, dimension):
+        encontro = 0
+        for dim in self._elemento.lista_dimensiones:
+            if dimension == dim[0]:
+                encontro = self._elemento.lista_dimensiones.index(dim) + 1
+                return encontro
+        return encontro
 
     def _abrir_unidad_de_trabajo(self):
         sesion = sessionmaker(bind=self._repositorio.contexto.recurso)

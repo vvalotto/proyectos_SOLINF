@@ -3,6 +3,8 @@ Se implementa el repositorio de la Elementos en Base de Datos
 """
 from dominio.repositorios.base_repositorio_elemento import *
 from infraestructura.persistencia.modelo.base_de_datos_proyectos import *
+from infraestructura.persistencia.mapeador.dimension_elemento import *
+from .DB_repositorio_dimension import *
 
 
 class DBRepositorioElemento(BaseRepositorioElemento):
@@ -10,6 +12,7 @@ class DBRepositorioElemento(BaseRepositorioElemento):
     def __init__(self, contexto, mapeador):
         super().__init__(contexto)
         self._mapeador = mapeador
+        self._repo_dimension = DBRepositorioDimension(contexto, MapeadorDatosDimension(contexto))
         return
 
     def agregar(self, elemento):
@@ -127,6 +130,28 @@ class DBRepositorioElemento(BaseRepositorioElemento):
         except Exception("Error al recuperar"):
             print("Repositorio de Elemento")
             return None
+
+    def agregar_dimension_elemento(self, dimension_elemento):
+        """
+        Persiste un nueva dimension para elemento.
+        :param dimension_elemento:
+        """
+        self._repo_dimension.agregar(dimension_elemento)
+        return
+
+    def eliminar_dimension_elemento(self, dimension_elemento):
+        self._repo_dimension.eliminar(dimension_elemento)
+        return
+
+    def recuperar_dimension_elemento(self, dimension_elemento):
+        return self._repo_dimension.recuperar(dimension_elemento)
+
+    def validar_existencia_dimension_elemento(self, dimension_elemento):
+        encontro = False
+        return encontro
+
+    def recuperar_dimensiones(self, elemento):
+        return self._repo_dimension.recuperar_por_elemento(elemento)
 
     @staticmethod
     def _copiar_registro(desde, hacia):

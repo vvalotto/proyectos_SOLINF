@@ -265,5 +265,17 @@ class Elemento(Entidad):
                 encontro = True
         return encontro
 
+    def recuperar_dimension(self, dimension):
+        self._lista_dimensiones.append([dimension, None])
+        return
+
+    def recuperar_esfuerzo(self, esfuerzo):
+        self._lista_esfuerzos.append([esfuerzo, None])
+        return
+
+    def recuperar_defecto(self, defecto):
+        self._lista_defectos.append([defecto, None])
+        return
+
     def __repr__(self):
         return str(self.nombre_elemento) + ": " + self._tipo_elemento
