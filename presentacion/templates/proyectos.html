@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %} ProyecSOLIF - Proyecto {% endblock %}
+
+{% block content %}
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-8">
+                       <h3><p class="text-center "> </p></h3>
+                        {{ form.hidden_tag() }}
+                </div>
+                <div class="col-lg-2">
+                    <a href="{{ url_for('proyecto', id='0') }}"
+                       class="btn btn-primary btn-lg" role="button">Agregar Proyecto</a>
+                        
+                </div>
+                </div>
+            </div>
+
+
+        <div class="panel panel-defaulf">
+            <div class="row">
+                <div class = "col-sm-10" style = "background-color:lavender">
+                    <div class="panel-heading" style="">
+                        <h1><p class="text-center"> Proyectos </h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class = "col-sm-10" style = "background-color:lavender">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nombre </th>
+                                <th>Descripción</th>
+                                <th>Tipo</th>
+                                <th>Ir a</th>
+                                <th>Estadisticas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in form.lista_proyectos %}
+                            <tr>
+                                <td>{{ item.nombre }}</td>
+                                <td>{{ item.descripcion}} </td>
+                                <td>{{ item.tipo_proyecto}}</td>
+                                <td><a href="{{ url_for('proyecto', id=item.identificacion) }}"> Ver proyecto </a></td>
+                                <td><a href=""> Ver Estadísticas </a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+{% endblock %}
