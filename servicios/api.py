@@ -10,6 +10,9 @@ config = Configurador
 def not_fount(error):
     return make_response(jsonify({'error': 'No Encontrado'}), 404)
 
+@app_api.errorhandler(500)
+def not_fount(error):
+    return make_response(jsonify({'error': error}), 500)
 
 """ Apis """
 @app_api.route("/proyectos/", methods=["GET"])
@@ -27,3 +30,31 @@ def get_proyectos():
         lista_proyectos.append(p)
 
     return jsonify(lista_proyectos)
+
+
+@app_api.route("/proyecto/<string:id>/", methods=["GET"])
+def get_proyecto(id):
+    """
+    Recupera un proyecto o
+    :param id:
+    :return:
+    """
+    try:
+        proyecto = config.gestor_proyecto.recuperar_proyecto(id)
+        p = {}
+        p['nombre_proyecto'] = str(proyecto.nombre)
+        p['tipo_proyecto'] = str(proyecto.tipo_proyecto)
+        p['descripcion'] = str(proyecto.descripcion)
+
+        lista_componentes = []
+        for componente in config.gestor_componente.obtener_componentes_del_proyecto(id):
+            c={}
+            c['nombre'] = str(componente.nombre)
+            c['tipo_componente'] = str(componente.tipo_componente)
+            c['identificacion'] = str(componente.identificacion)
+            lista_componentes.append(c)
+
+        p['lista_componentes'] = lista_componentes
+    except:
+        return make_response(jsonify({'error': "Al recuperar el id:" + id}), 500)
+    return jsonify(p)
