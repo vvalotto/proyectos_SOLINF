@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, abort, make_response, request, jsonify
 from servicios.configurador import *
-
+from dominio.analitica.analizador import Analizador
 
 app_api = Flask(__name__)
 config = Configurador
@@ -134,3 +134,27 @@ def get_elemento(id):
 @app_api.route("/elemento/<string:id>/", methods=["POST"])
 def post_elemento(id):
     return "OK"
+
+
+@app_api.route("/proyecto/productividad/", methods=["GET"])
+def get_productividad():
+    datos_productividad = {}
+    datos_productividad['productividad'] = config.estadisticas.productividad
+    datos_productividad['esfuerzo real'] = config.estadisticas.esfuerzo_real
+    datos_productividad['tamaño real'] = config.estadisticas.tamanio_real_UCP
+    return jsonify(datos_productividad)
+
+
+@app_api.route("/elemento/predictor/", methods=["POST"])
+def post_predictor():
+    analizador = Analizador(config.muestra_proyectos)
+    dimensiones = request.get_json()
+    escenarios = int(dimensiones['escenarios'])
+    entidades = int(dimensiones['entidades'])
+    interfaces = int(dimensiones['interfaces'])
+
+    x = config.muestra_proyectos.obtener_dimensiones_proyecto()
+    y = config.muestra_proyectos.obtener_clases_CU()
+    analizador.clasificar_tamanio(x, y)
+    pred = analizador.predicir_tamanio(escenarios, entidades, interfaces)[0]
+    return str(pred), 200

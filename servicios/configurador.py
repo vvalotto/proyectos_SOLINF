@@ -15,6 +15,9 @@ from aplicacion.gestores.gestor_proyecto import *
 from aplicacion.gestores.gestor_componente import *
 from aplicacion.gestores.gestor_elemento import *
 
+from aplicacion.gestores.estadisticas_proyecto import EstadisticasProyecto
+from dominio.analitica.muestra import Muestra
+
 import os
 directorio_base = os.path.abspath(os.path.dirname(__file__))
 URI_DATABASE = 'sqlite:///' + os.path.join(directorio_base, 'proyectos.sqlite')
@@ -35,3 +38,9 @@ class Configurador:
 
     gestor_elemento = GestorElemento()
     gestor_elemento.asignar_repositorio(repositorio_elemento)
+
+    muestra_proyectos = Muestra("")
+    estadisticas = EstadisticasProyecto("Sistema de Gestión de Flota", muestra_proyectos)
+    repositorio = "proyectos.sqlite"
+    datos_origen = "SELECT * FROM mediciones_proyecto;"
+    muestra_proyectos.cargar_valores_de_muestra(repositorio, datos_origen)
