@@ -114,3 +114,23 @@ def get_componente(id):
     c['lista_elementos'] = lista_elementos
 
     return jsonify(c)
+
+
+@app_api.route("/componente/<string:id>/", methods=["POST"])
+def post_componente(id):
+    return "OK"
+
+
+@app_api.route("/elemento/<string:id>/", methods=["GET"])
+def get_elementos(id):
+        return "Lista de elementos del modulo"
+
+
+@app_api.route("/elementol/<string:id>", methods=["GET"])
+def get_elemento(id):
+    return "Componente"
+
+
+@app_api.route("/elemento/<string:id>/", methods=["POST"])
+def post_elemento(id):
+    return "OK"
