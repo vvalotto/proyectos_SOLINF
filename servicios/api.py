@@ -58,3 +58,20 @@ def get_proyecto(id):
     except:
         return make_response(jsonify({'error': "Al recuperar el id:" + id}), 500)
     return jsonify(p)
+
+
+@app_api.route("/proyecto/", methods=["POST"])
+def post_proyecto():
+    """
+    Recupera un proyecto o
+    :param id:
+    :return:
+    """
+    datos = request.get_json()
+    nombre_proyecto = datos['nombre_proyecto']
+    tipo_proyecto = datos['tipo_proyecto']
+    descripcion = datos['descripcion']
+    fecha_fin = datos['fecha_fin']
+    config.gestor_proyecto.crear_proyecto(nombre_proyecto, tipo_proyecto, descripcion, fecha_fin)
+    config.gestor_proyecto.guardar_proyecto()
+    return "Proyecto Guardado", 201
