@@ -63,6 +63,7 @@ class Muestra:
         return res
 
     def obtener_cantidad_de_defectos(self):
-        defectos_TF = self._dataframe_muestra["Defectos_Test_Funcional"].sum()
+        defectos_TF = 0
+        defectos_TF = self._dataframe_muestra["Defectos_Test_Funcional"].sum() + defectos_TF
         defectos_TF = self._dataframe_muestra["Defectos_Test_Usuarios"].sum() + defectos_TF
-        return defectos_TF
+        return int(defectos_TF)

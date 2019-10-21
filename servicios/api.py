@@ -142,6 +142,8 @@ def get_productividad():
     datos_productividad['productividad'] = config.estadisticas.productividad
     datos_productividad['esfuerzo real'] = config.estadisticas.esfuerzo_real
     datos_productividad['tamaño real'] = config.estadisticas.tamanio_real_UCP
+    datos_productividad['densidad defectos'] = config.estadisticas.densidad_de_defectos
+    datos_productividad['cantidad defectos'] = config.estadisticas.cantidad_de_defectos
     return jsonify(datos_productividad)
 
 
